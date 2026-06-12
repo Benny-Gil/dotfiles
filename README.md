@@ -12,10 +12,8 @@ Cross-platform (macOS + Linux) dotfiles, managed with [GNU Stow](https://www.gnu
 | `tmux`        | `.tmux.conf`                                                  | both  |
 | `starship`    | `.config/starship.toml`                                       | both  |
 | `fastfetch`   | `.config/fastfetch/`                                          | both  |
-| `btop`/`htop` | `.config/btop/`, `.config/htop/`                              | both  |
+| `btop`        | `.config/btop/`                                               | both  |
 | `karabiner`   | `.config/karabiner/`                                          | macOS |
-| `linearmouse` | `.config/linearmouse/`                                        | macOS |
-| `sketchybar`  | `.config/sketchybar/`                                         | macOS |
 
 Each top-level folder is a **stow package**: its contents mirror your home
 directory, so `zsh/.zshrc` → `~/.zshrc`.
