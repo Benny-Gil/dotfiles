@@ -61,7 +61,7 @@
 	undo = reset --soft HEAD~1
 	aliases = config --get-regexp ^alias\\.
 
-# Machine-specific overrides (credential helper, work identity) — untracked.
+# Machine-specific overrides (credential helper, etc.) — untracked.
 # A plain include applies everywhere; git silently skips it if the file is missing.
 [include]
 	path = ~/.gitconfig.local

@@ -1,5 +1,7 @@
 # ~/.zshrc — interactive shell config
 # Managed by ~/dotfiles (stow). Cross-platform: macOS + Linux.
+# Everything machine-specific or optional is guarded, so this file is safe
+# to load on a box that has none of the optional tools installed.
 
 # --- OS detection ---------------------------------------------------------
 case "$OSTYPE" in
@@ -19,6 +21,11 @@ elif [[ -x /home/linuxbrew/.linuxbrew/bin/brew ]]; then
   eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 fi
 
+# --- Powerlevel10k instant prompt (must run before anything that prints) --
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+
 # --- History --------------------------------------------------------------
 HISTFILE="$HOME/.zsh_history"
 HISTSIZE=50000
@@ -31,38 +38,55 @@ setopt AUTO_CD AUTO_PUSHD PUSHD_IGNORE_DUPS
 setopt INTERACTIVE_COMMENTS NO_BEEP
 setopt GLOB_DOTS NUMERIC_GLOB_SORT
 
-# --- Completion -----------------------------------------------------------
-autoload -Uz compinit
-# Full (security-checked) compinit only if the dump is missing or >24h old;
-# otherwise skip the check for faster startup.
-if [[ -n ${ZDOTDIR:-$HOME}/.zcompdump(#qN.mh-24) ]]; then
-  compinit -C   # dump is fresh (<24h)
+# --- Extra completion dirs (must precede compinit) -------------------------
+[[ -d "$HOME/.oh-my-zsh/custom/completions" ]] && fpath=("$HOME/.oh-my-zsh/custom/completions" $fpath)
+
+# --- oh-my-zsh if installed; otherwise plain compinit ----------------------
+if [[ -d "$HOME/.oh-my-zsh" ]]; then
+  export ZSH="$HOME/.oh-my-zsh"
+  ZSH_THEME=""        # prompt handled below (p10k / starship)
+  plugins=(git)
+  source "$ZSH/oh-my-zsh.sh"   # runs compinit itself
 else
-  compinit      # missing or stale -> full init
+  autoload -Uz compinit
+  # Full (security-checked) compinit only if the dump is missing or >24h old.
+  if [[ -n ${ZDOTDIR:-$HOME}/.zcompdump(#qN.mh-24) ]]; then
+    compinit -C   # dump is fresh (<24h)
+  else
+    compinit      # missing or stale -> full init
+  fi
 fi
 zstyle ':completion:*' menu select
 zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'
-zstyle ':completion:*' list-colors ''
 
-# --- Keybindings ----------------------------------------------------------
+# --- Keybindings ------------------------------------------------------------
 bindkey -e
 bindkey '^[[A' history-search-backward
 bindkey '^[[B' history-search-forward
 
-# --- Tool integrations (only if installed) --------------------------------
-command -v zoxide >/dev/null 2>&1 && eval "$(zoxide init zsh)"   # z / zi
-command -v fzf    >/dev/null 2>&1 && eval "$(fzf --zsh 2>/dev/null)"  # Ctrl-R/T, needs fzf >= 0.48
-
-# --- Source split config --------------------------------------------------
-for f in "$HOME/.config/zsh/exports.zsh" "$HOME/.config/zsh/aliases.zsh"; do
+# --- Source split config ----------------------------------------------------
+# Order matters: exports defines path helpers used by devtools.
+for f in "$HOME/.config/zsh/exports.zsh" \
+         "$HOME/.config/zsh/devtools.zsh" \
+         "$HOME/.config/zsh/aliases.zsh"; do
   [[ -r "$f" ]] && source "$f"
 done
 
-# --- Local, untracked overrides (machine-specific secrets) ----------------
+# --- Tool integrations (only if installed) ----------------------------------
+command -v zoxide >/dev/null 2>&1 && eval "$(zoxide init zsh)"        # z / zi
+command -v fzf    >/dev/null 2>&1 && eval "$(fzf --zsh 2>/dev/null)"  # Ctrl-R/T, needs fzf >= 0.48
+
+# iTerm2 shell integration (macOS, harmless elsewhere)
+[[ -e "$HOME/.iterm2_shell_integration.zsh" ]] && source "$HOME/.iterm2_shell_integration.zsh"
+
+# --- Local, untracked overrides (machine-specific secrets) ------------------
 [[ -r "$HOME/.zshrc.local" ]] && source "$HOME/.zshrc.local"
 
-# --- Prompt: starship if available, else a small fallback -----------------
-if command -v starship >/dev/null 2>&1; then
+# --- Prompt: p10k > starship > built-in fallback -----------------------------
+if [[ -r "$HOME/powerlevel10k/powerlevel10k.zsh-theme" ]]; then
+  source "$HOME/powerlevel10k/powerlevel10k.zsh-theme"
+  [[ -r "$HOME/.p10k.zsh" ]] && source "$HOME/.p10k.zsh"
+elif command -v starship >/dev/null 2>&1; then
   eval "$(starship init zsh)"
 else
   autoload -Uz vcs_info
@@ -71,3 +95,16 @@ else
   setopt PROMPT_SUBST
   PROMPT='%F{cyan}%~%f%F{yellow}${vcs_info_msg_0_}%f %# '
 fi
+
+# --- Autosuggestions + syntax highlighting (highlighting must load LAST) ----
+for _zplug in \
+  "${HOMEBREW_PREFIX:-/opt/homebrew}/share/zsh-autosuggestions/zsh-autosuggestions.zsh" \
+  "/usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh"; do
+  [[ -r "$_zplug" ]] && source "$_zplug" && break
+done
+for _zplug in \
+  "${HOMEBREW_PREFIX:-/opt/homebrew}/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" \
+  "/usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"; do
+  [[ -r "$_zplug" ]] && source "$_zplug" && break
+done
+unset _zplug

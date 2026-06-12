@@ -1,36 +1,69 @@
-# Global gitignore — applies to every repo via core.excludesfile
+# Global gitignore — applies to every repo via core.excludesfile.
+#
+# Philosophy: this file ignores junk produced by YOUR machine and tools
+# (OS metadata, editor swap files, caches, local secrets). Anything that is
+# a property of a project (dist/, build/, vendored deps a repo chooses to
+# track) belongs in that project's own .gitignore, not here.
 
-# --- macOS ---
+# --- macOS -------------------------------------------------------------------
 .DS_Store
 .AppleDouble
 .LSOverride
 ._*
+.DocumentRevisions-V100
+.fseventsd
 .Spotlight-V100
+.TemporaryItems
 .Trashes
+.VolumeIcon.icns
+Icon?
 
-# --- Linux ---
-*~
+# --- Linux -------------------------------------------------------------------
 .fuse_hidden*
 .directory
 .Trash-*
+.nfs*
 
-# --- Editors ---
-*.swp
-*.swo
+# --- Windows (network shares / dual boot) --------------------------------------
+Thumbs.db
+Thumbs.db:encryptable
+Desktop.ini
+$RECYCLE.BIN/
+
+# --- Editors -------------------------------------------------------------------
+# vim/neovim
+[._]*.s[a-v][a-z]
+[._]*.sw[a-p]
+Session.vim
+.netrwhist
+*~
+# emacs
+\#*\#
+.\#*
+# JetBrains / VS Code / Sublime (personal workspace state)
 .idea/
 .vscode/
-*.sublime-*
-.nvimlog
+*.sublime-workspace
 
-# --- Env / secrets ---
+# --- Tool caches (never meant to be tracked) -----------------------------------
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.ipynb_checkpoints/
+node_modules/
+npm-debug.log*
+yarn-error.log
+.direnv/
+
+# --- AI tooling (per-machine local settings) -----------------------------------
+**/.claude/settings.local.json
+
+# --- Secrets safety net ----------------------------------------------------------
+# Last line of defense against committing credentials by accident.
+# (Repos that genuinely need an .env tracked can force-add: git add -f .env)
 .env
 .env.local
+.env.*.local
 *.pem
-
-# --- Build / deps ---
-node_modules/
-__pycache__/
-*.pyc
-.venv/
-dist/
-build/

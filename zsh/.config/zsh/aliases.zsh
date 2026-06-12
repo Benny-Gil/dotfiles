@@ -47,6 +47,15 @@ alias gl='git log --oneline --graph --decorate -20'
 alias gp='git push'
 alias gpl='git pull'
 
+# --- Python ----------------------------------------------------------------
+alias python='python3'
+alias pip='pip3'
+
+# --- macOS-specific (guarded) ------------------------------------------------
+[[ -x "/Applications/Tailscale.app/Contents/MacOS/Tailscale" ]] && \
+  alias tailscale='/Applications/Tailscale.app/Contents/MacOS/Tailscale'
+command -v fastfetch >/dev/null 2>&1 && alias fetch='fastfetch'  # uses ~/.config/fastfetch/config.jsonc
+
 # --- Misc -----------------------------------------------------------------
 alias reload='exec zsh'
 alias path='echo $PATH | tr ":" "\n"'

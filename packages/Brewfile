@@ -9,6 +9,14 @@ brew "neovim"
 brew "tmux"
 brew "starship"
 
+# Shell plugins (sourced by .zshrc when present)
+brew "zsh-autosuggestions"
+brew "zsh-syntax-highlighting"
+
+# Language version managers (initialized by devtools.zsh when present)
+brew "pyenv"
+brew "nvm"
+
 # Modern replacements (referenced by the zsh aliases)
 brew "eza"
 brew "bat"

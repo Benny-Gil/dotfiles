@@ -8,7 +8,9 @@
 set -euo pipefail
 
 DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-PACKAGES=(zsh git nvim tmux starship)
+PACKAGES_COMMON=(zsh git nvim tmux starship fastfetch btop htop)
+PACKAGES_MACOS=(karabiner linearmouse sketchybar)
+PACKAGES=("${PACKAGES_COMMON[@]}")   # finalized in main() after OS detection
 
 # --- pretty logging -------------------------------------------------------
 info()  { printf '\033[0;34m::\033[0m %s\n' "$*"; }
@@ -106,6 +108,9 @@ unstow_all() {
 main() {
   detect_os
   info "Detected OS: $OS"
+  if [[ "$OS" == "macos" ]]; then
+    PACKAGES+=("${PACKAGES_MACOS[@]}")
+  fi
   case "${1:-}" in
     --unstow)     unstow_all; exit 0 ;;
     --no-install) stow_all ;;

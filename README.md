@@ -4,13 +4,18 @@ Cross-platform (macOS + Linux) dotfiles, managed with [GNU Stow](https://www.gnu
 
 ## What's inside
 
-| Package    | Symlinks                                              |
-| ---------- | ----------------------------------------------------- |
-| `zsh`      | `.zshrc`, `.config/zsh/{exports,aliases}.zsh`         |
-| `git`      | `.gitconfig`, `.gitignore_global`                     |
-| `nvim`     | `.config/nvim/init.lua`                               |
-| `tmux`     | `.tmux.conf`                                          |
-| `starship` | `.config/starship.toml`                               |
+| Package       | Symlinks                                                      | OS    |
+| ------------- | ------------------------------------------------------------- | ----- |
+| `zsh`         | `.zshrc`, `.p10k.zsh`, `.config/zsh/{exports,devtools,aliases}.zsh` | both  |
+| `git`         | `.gitconfig`, `.gitignore_global`          | both  |
+| `nvim`        | `.config/nvim/` (kickstart.nvim based)                        | both  |
+| `tmux`        | `.tmux.conf`                                                  | both  |
+| `starship`    | `.config/starship.toml`                                       | both  |
+| `fastfetch`   | `.config/fastfetch/`                                          | both  |
+| `btop`/`htop` | `.config/btop/`, `.config/htop/`                              | both  |
+| `karabiner`   | `.config/karabiner/`                                          | macOS |
+| `linearmouse` | `.config/linearmouse/`                                        | macOS |
+| `sketchybar`  | `.config/sketchybar/`                                         | macOS |
 
 Each top-level folder is a **stow package**: its contents mirror your home
 directory, so `zsh/.zshrc` → `~/.zshrc`.
@@ -61,6 +66,25 @@ tweaks here:
 
 - `~/.zshrc.local` — extra shell config
 - `~/.gitconfig.local` — e.g. work email, credential helper
+
+## Prompt & plugins
+
+The zsh config auto-detects what's installed, in this order:
+
+1. **powerlevel10k** (`~/powerlevel10k` clone) + oh-my-zsh if present
+2. **starship** if installed
+3. minimal built-in `vcs_info` prompt otherwise
+
+So a fresh Linux box gets a working starship prompt with zero extra steps;
+to get the full p10k setup:
+
+```sh
+git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ~/powerlevel10k
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+```
+
+`pyenv`, `nvm` (lazy-loaded), and SDKMAN are initialized by
+`.config/zsh/devtools.zsh` only when actually installed.
 
 ## Cross-platform notes
 
