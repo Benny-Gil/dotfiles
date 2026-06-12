@@ -6,13 +6,14 @@ Cross-platform (macOS + Linux) dotfiles, managed with [GNU Stow](https://www.gnu
 
 | Package       | Symlinks                                                      | OS    |
 | ------------- | ------------------------------------------------------------- | ----- |
-| `zsh`         | `.zshrc`, `.p10k.zsh`, `.config/zsh/{exports,devtools,aliases}.zsh` | both  |
+| `zsh`         | `.zshrc`, `.zshenv`, `.zprofile`, `.p10k.zsh`, `.config/zsh/{exports,devtools,aliases}.zsh` | both  |
 | `git`         | `.gitconfig`, `.gitignore_global`          | both  |
 | `nvim`        | `.config/nvim/` (kickstart.nvim based)                        | both  |
 | `tmux`        | `.tmux.conf`                                                  | both  |
 | `starship`    | `.config/starship.toml`                                       | both  |
 | `fastfetch`   | `.config/fastfetch/`                                          | both  |
 | `btop`        | `.config/btop/`                                               | both  |
+| `zed`         | `.config/zed/settings.json`                                   | both  |
 | `karabiner`   | `.config/karabiner/`                                          | macOS |
 
 Each top-level folder is a **stow package**: its contents mirror your home
