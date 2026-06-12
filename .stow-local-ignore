@@ -1,0 +1,8 @@
+# Files stow should never symlink into $HOME
+\.git
+\.gitignore
+bootstrap\.sh
+README\.md
+LICENSE
+packages
+\.stow-local-ignore

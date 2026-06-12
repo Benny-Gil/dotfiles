@@ -1,0 +1,37 @@
+# Global gitignore — applies to every repo via core.excludesfile
+
+# --- macOS ---
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.Spotlight-V100
+.Trashes
+
+# --- Linux ---
+*~
+.fuse_hidden*
+.directory
+.Trash-*
+
+# --- Editors ---
+*.swp
+*.swo
+.idea/
+.vscode/
+*.sublime-*
+.nvimlog
+
+# --- Env / secrets ---
+.env
+.env.local
+*.pem
+
+# --- Build / deps ---
+node_modules/
+__pycache__/
+*.pyc
+.venv/
+dist/
+build/
+.DS_Store

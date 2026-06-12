@@ -1,0 +1,29 @@
+# Brewfile — macOS (and Linuxbrew) packages.
+# Install with:  brew bundle --file=~/dotfiles/packages/Brewfile
+
+# Core CLI
+brew "git"
+brew "stow"
+brew "zsh"
+brew "neovim"
+brew "tmux"
+brew "starship"
+
+# Modern replacements (referenced by the zsh aliases)
+brew "eza"
+brew "bat"
+brew "fd"
+brew "ripgrep"
+brew "fzf"
+brew "zoxide"
+brew "jq"
+
+# Nice to have
+brew "gh"
+brew "htop"
+brew "tree"
+brew "wget"
+
+# macOS-only casks (ignored on Linuxbrew)
+# cask "ghostty"
+# cask "rectangle"

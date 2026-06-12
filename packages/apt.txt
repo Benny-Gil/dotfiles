@@ -1,0 +1,24 @@
+# apt packages — Debian/Ubuntu Linux.
+# Install with:  sudo apt update && sudo apt install -y $(grep -vE '^\s*#|^\s*$' ~/dotfiles/packages/apt.txt)
+#
+# Note: some modern tools have different/renamed binaries on apt:
+#   - fd       -> package "fd-find"   (binary: fdfind)
+#   - bat      -> package "bat"       (binary: batcat on older releases)
+#   - eza      -> not in default repos; install via cargo or its own apt repo
+# The zsh aliases degrade gracefully if a tool is missing.
+
+git
+stow
+zsh
+neovim
+tmux
+ripgrep
+fd-find
+bat
+fzf
+jq
+htop
+tree
+wget
+curl
+build-essential

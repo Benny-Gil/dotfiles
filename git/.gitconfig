@@ -1,0 +1,58 @@
+[user]
+	name = Benny
+	email = benny.gil999@gmail.com
+
+[init]
+	defaultBranch = main
+
+[core]
+	editor = nvim
+	excludesfile = ~/.gitignore_global
+	autocrlf = input
+	pager = less -FRX
+
+[color]
+	ui = auto
+
+[pull]
+	rebase = true
+
+[push]
+	default = current
+	autoSetupRemote = true
+
+[fetch]
+	prune = true
+
+[rebase]
+	autoStash = true
+
+[merge]
+	conflictstyle = zdiff3
+
+[diff]
+	colorMoved = default
+	algorithm = histogram
+
+[branch]
+	sort = -committerdate
+
+[help]
+	autocorrect = prompt
+
+[alias]
+	st = status -sb
+	co = checkout
+	br = branch
+	ci = commit
+	cm = commit -m
+	amend = commit --amend --no-edit
+	unstage = reset HEAD --
+	last = log -1 HEAD
+	lg = log --oneline --graph --decorate --all
+	undo = reset --soft HEAD~1
+	aliases = config --get-regexp ^alias\\.
+
+# macOS keychain / Linux libsecret credential helpers are set per-OS below.
+[includeIf "gitdir:~/"]
+	path = ~/.gitconfig.local
