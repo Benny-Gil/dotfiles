@@ -17,8 +17,13 @@ fd-find
 bat
 fzf
 jq
+zoxide
 htop
 tree
 wget
 curl
+unzip
 build-essential
+# clipboard providers for nvim (clipboard=unnamedplus)
+xclip
+wl-clipboard

@@ -17,9 +17,17 @@ else
 fi
 
 # --- Modern replacements (used only if installed) -------------------------
-command -v bat  >/dev/null 2>&1 && alias cat='bat --paging=never'
-command -v fd   >/dev/null 2>&1 || alias fd='find'
-command -v rg   >/dev/null 2>&1 && alias grep='rg' || alias grep='grep --color=auto'
+if command -v bat >/dev/null 2>&1; then
+  alias cat='bat --paging=never'
+elif command -v batcat >/dev/null 2>&1; then  # Debian/Ubuntu package name
+  alias bat='batcat'
+  alias cat='batcat --paging=never'
+fi
+# Debian/Ubuntu ship fd as "fdfind"
+if ! command -v fd >/dev/null 2>&1 && command -v fdfind >/dev/null 2>&1; then
+  alias fd='fdfind'
+fi
+alias grep='grep --color=auto'  # rg stays rg — different flag semantics
 
 # --- Navigation -----------------------------------------------------------
 alias ..='cd ..'
@@ -42,7 +50,7 @@ alias gpl='git pull'
 # --- Misc -----------------------------------------------------------------
 alias reload='exec zsh'
 alias path='echo $PATH | tr ":" "\n"'
-alias ip='curl -s ifconfig.me; echo'
+alias myip='curl -s ifconfig.me; echo'  # NOT "ip" — that shadows the Linux ip(8) command
 
 # mkdir + cd
 mkcd() { mkdir -p "$1" && cd "$1"; }

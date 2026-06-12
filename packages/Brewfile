@@ -24,6 +24,7 @@ brew "htop"
 brew "tree"
 brew "wget"
 
-# macOS-only casks (ignored on Linuxbrew)
+# macOS-only casks (this Brewfile is only run on macOS by bootstrap.sh)
+cask "font-jetbrains-mono-nerd-font"  # starship.toml uses Nerd Font glyphs
 # cask "ghostty"
 # cask "rectangle"

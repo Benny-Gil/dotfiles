@@ -46,13 +46,24 @@ install_linux() {
   sudo apt-get install -y $pkgs
   command -v stow >/dev/null 2>&1 || sudo apt-get install -y stow
   ok "apt packages installed"
+
+  # starship is not in the default apt repos — use the official installer.
+  if ! command -v starship >/dev/null 2>&1; then
+    info "Installing starship to ~/.local/bin…"
+    mkdir -p "$HOME/.local/bin"
+    curl -sS https://starship.rs/install.sh | sh -s -- -y -b "$HOME/.local/bin"
+  fi
 }
 
 # --- stow -----------------------------------------------------------------
 ensure_stow() {
-  command -v stow >/dev/null 2>&1 && return
+  command -v stow >/dev/null 2>&1 && return 0
   warn "GNU Stow not found."
-  [[ "$OS" == "macos" ]] && brew install stow || sudo apt-get install -y stow
+  if [[ "$OS" == "macos" ]]; then
+    brew install stow
+  else
+    sudo apt-get install -y stow
+  fi
 }
 
 # Back up any real (non-symlink) file that stow would clobber.
@@ -71,7 +82,9 @@ backup_conflicts() {
       fi
     done < <(find "$DOTFILES_DIR/$pkg" -type f -print0)
   done
-  [[ $moved -eq 1 ]] && info "Conflicts saved under $backup_dir"
+  if [[ $moved -eq 1 ]]; then
+    info "Conflicts saved under $backup_dir"
+  fi
 }
 
 stow_all() {
@@ -96,7 +109,14 @@ main() {
   case "${1:-}" in
     --unstow)     unstow_all; exit 0 ;;
     --no-install) stow_all ;;
-    "")           [[ "$OS" == "macos" ]] && install_macos || install_linux; stow_all ;;
+    "")
+      if [[ "$OS" == "macos" ]]; then
+        install_macos
+      else
+        install_linux
+      fi
+      stow_all
+      ;;
     *)            die "Unknown option: $1" ;;
   esac
   ok "Done. Restart your shell:  exec zsh"

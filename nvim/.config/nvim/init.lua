@@ -59,7 +59,8 @@ map("v", "K", ":m '<-2<cr>gv=gv")
 
 -- Highlight on yank
 vim.api.nvim_create_autocmd("TextYankPost", {
-  callback = function() vim.highlight.on_yank({ timeout = 150 }) end,
+  -- vim.hl replaced vim.highlight in nvim 0.11; keep compat with older versions
+  callback = function() (vim.hl or vim.highlight).on_yank({ timeout = 150 }) end,
 })
 
 -- netrw as a lightweight file tree

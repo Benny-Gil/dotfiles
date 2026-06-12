@@ -33,11 +33,12 @@ setopt GLOB_DOTS NUMERIC_GLOB_SORT
 
 # --- Completion -----------------------------------------------------------
 autoload -Uz compinit
-# Cache compdump; only re-secure-check once a day for speed.
-if [[ -n ${ZDOTDIR:-$HOME}/.zcompdump(#qN.mh+24) ]]; then
-  compinit
+# Full (security-checked) compinit only if the dump is missing or >24h old;
+# otherwise skip the check for faster startup.
+if [[ -n ${ZDOTDIR:-$HOME}/.zcompdump(#qN.mh-24) ]]; then
+  compinit -C   # dump is fresh (<24h)
 else
-  compinit -C
+  compinit      # missing or stale -> full init
 fi
 zstyle ':completion:*' menu select
 zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'
@@ -47,6 +48,10 @@ zstyle ':completion:*' list-colors ''
 bindkey -e
 bindkey '^[[A' history-search-backward
 bindkey '^[[B' history-search-forward
+
+# --- Tool integrations (only if installed) --------------------------------
+command -v zoxide >/dev/null 2>&1 && eval "$(zoxide init zsh)"   # z / zi
+command -v fzf    >/dev/null 2>&1 && eval "$(fzf --zsh 2>/dev/null)"  # Ctrl-R/T, needs fzf >= 0.48
 
 # --- Source split config --------------------------------------------------
 for f in "$HOME/.config/zsh/exports.zsh" "$HOME/.config/zsh/aliases.zsh"; do
