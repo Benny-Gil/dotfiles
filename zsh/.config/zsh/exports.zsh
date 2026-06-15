@@ -31,6 +31,7 @@ path_prepend "$HOME/bin"
 # Language toolchains (only added if present)
 path_prepend "$HOME/.cargo/bin"
 path_prepend "$HOME/go/bin"
+path_prepend "$HOME/.npm-global/bin"   # npm global prefix (claude, pnpm, codeburn)
 
 # macOS extras (all dir-guarded, so harmless on Linux)
 path_prepend "/opt/local/bin"                                          # MacPorts

@@ -57,6 +57,8 @@ alias pip='pip3'
 command -v fastfetch >/dev/null 2>&1 && alias fetch='fastfetch'  # uses ~/.config/fastfetch/config.jsonc
 
 # --- Misc -----------------------------------------------------------------
+# Switch to Windows on next boot (dual-boot helper; only if the script exists)
+[[ -x "$HOME/switch-to-windows.sh" ]] && alias win="$HOME/switch-to-windows.sh"
 alias reload='exec zsh'
 alias path='echo $PATH | tr ":" "\n"'
 alias myip='curl -s ifconfig.me; echo'  # NOT "ip" — that shadows the Linux ip(8) command
