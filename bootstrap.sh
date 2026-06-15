@@ -8,7 +8,7 @@
 set -euo pipefail
 
 DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-PACKAGES_COMMON=(zsh git nvim tmux starship fastfetch btop zed)
+PACKAGES_COMMON=(zsh git nvim tmux starship fastfetch btop zed kitty)
 PACKAGES_MACOS=(karabiner)
 PACKAGES=("${PACKAGES_COMMON[@]}")   # finalized in main() after OS detection
 
@@ -26,7 +26,12 @@ detect_os() {
       if [[ -r /etc/os-release ]]; then
         # shellcheck disable=SC1091
         . /etc/os-release
-        DISTRO="${ID:-unknown}"
+        # Treat Arch-based distros (EndeavourOS, Manjaro, etc.) as arch
+        if [[ "${ID:-}" == "arch" || "${ID_LIKE:-}" == *arch* ]]; then
+          DISTRO="arch"
+        else
+          DISTRO="${ID:-unknown}"
+        fi
       else
         DISTRO="unknown"
       fi

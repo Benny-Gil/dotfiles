@@ -27,6 +27,7 @@ curl
 unzip
 base-devel
 fastfetch
+kitty
 # clipboard providers for nvim (clipboard=unnamedplus)
 xclip
 wl-clipboard
