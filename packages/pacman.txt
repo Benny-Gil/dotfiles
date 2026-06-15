@@ -1,0 +1,32 @@
+# Arch Linux packages (pacman / official repos).
+# Install with:  sudo pacman -S --needed $(grep -vE '^\s*#|^\s*$' ~/dotfiles/packages/pacman.txt)
+#
+# AUR packages (not listed here, install manually via yay/paru if needed):
+#   pyenv, nvm
+
+git
+stow
+zsh
+zsh-autosuggestions
+zsh-syntax-highlighting
+neovim
+tmux
+starship
+ripgrep
+fd
+bat
+fzf
+jq
+zoxide
+eza
+htop
+btop
+tree
+wget
+curl
+unzip
+base-devel
+fastfetch
+# clipboard providers for nvim (clipboard=unnamedplus)
+xclip
+wl-clipboard

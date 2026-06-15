@@ -21,7 +21,16 @@ die()   { printf '\033[0;31mxx\033[0m %s\n' "$*" >&2; exit 1; }
 detect_os() {
   case "$(uname -s)" in
     Darwin) OS="macos" ;;
-    Linux)  OS="linux" ;;
+    Linux)
+      OS="linux"
+      if [[ -r /etc/os-release ]]; then
+        # shellcheck disable=SC1091
+        . /etc/os-release
+        DISTRO="${ID:-unknown}"
+      else
+        DISTRO="unknown"
+      fi
+      ;;
     *)      die "Unsupported OS: $(uname -s)" ;;
   esac
 }
@@ -38,7 +47,17 @@ install_macos() {
   ok "Homebrew packages installed"
 }
 
-install_linux() {
+install_arch() {
+  info "Installing pacman packages…"
+  local pkgs
+  pkgs=$(grep -vE '^\s*#|^\s*$' "$DOTFILES_DIR/packages/pacman.txt" | tr '\n' ' ')
+  sudo pacman -Syu --needed --noconfirm
+  # shellcheck disable=SC2086
+  sudo pacman -S --needed --noconfirm $pkgs
+  ok "pacman packages installed"
+}
+
+install_apt() {
   command -v apt-get >/dev/null 2>&1 || { warn "Non-apt Linux: install packages manually (see packages/apt.txt)"; return; }
   info "Installing apt packages…"
   local pkgs
@@ -57,12 +76,21 @@ install_linux() {
   fi
 }
 
+install_linux() {
+  case "${DISTRO:-unknown}" in
+    arch) install_arch ;;
+    *)    install_apt  ;;
+  esac
+}
+
 # --- stow -----------------------------------------------------------------
 ensure_stow() {
   command -v stow >/dev/null 2>&1 && return 0
   warn "GNU Stow not found."
   if [[ "$OS" == "macos" ]]; then
     brew install stow
+  elif [[ "${DISTRO:-}" == "arch" ]]; then
+    sudo pacman -S --needed --noconfirm stow
   else
     sudo apt-get install -y stow
   fi
