@@ -27,6 +27,8 @@ curl
 unzip
 build-essential
 kitty
+zathura            # PDF viewer (vimtex on Linux)
+zathura-pdf-mupdf  # PDF backend for zathura
 # clipboard providers for nvim (clipboard=unnamedplus)
 xclip
 wl-clipboard
