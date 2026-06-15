@@ -22,7 +22,7 @@ directory, so `zsh/.zshrc` → `~/.zshrc`.
 ## Quick start
 
 ```sh
-git clone https://github.com/<you>/dotfiles.git ~/dotfiles
+git clone https://github.com/benny-gil/dotfiles.git ~/dotfiles
 cd ~/dotfiles
 ./bootstrap.sh
 exec zsh
